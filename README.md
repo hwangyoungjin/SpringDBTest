@@ -21,3 +21,23 @@ SQLMapper vs ORM with Spring Transaction
    - Spring MVC
    - Thymeleaf
    - Lombok
+
+#### 2. JDBC template (with jdbc feature bransh)
+- 장점
+  1. 설정편리
+     ```properties
+     # Spring으로 JDBC 사용시 기본적으로 사용되는 라이브러리
+     # jdbctemplate 추가 
+     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+     ```
+  2. 반복 문제 해결
+     ```
+     1. 커넥션 흭득
+     2. statement를 준비하고 실행
+     3. 결과 반복하도록 루프 실행
+     4. 커넥션 종료
+     5. 트랜잭션을 다루기 위한 커넥션 동기화
+     6. 예외 발생시 스프링 예외 변환기 실행 
+     ```
+- 단점
+  1. 동적 SQL 해결 어렵
