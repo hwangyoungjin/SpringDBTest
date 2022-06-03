@@ -1,14 +1,14 @@
 # SpringDBTest
 SQLMapper vs ORM with Spring Transaction
 ---
-### SQLMapper
-1. JDBC Template
-2. Mybatis
-### ORM
-1. Jpa(Hibernate)
+### By Spring
+1. [JDBC Template](https://github.com/hwangyoungjin/SpringDBTest#2-jdbc-template-with-jdbc-feature-bransh)
 2. SpringDataJpa
-3. QueryDsl
-
+### SQLMapper
+- Mybatis
+### ORM
+- Jpa(Hibernate)
+   - QueryDsl
 ---
 #### 1. Init (InMemory)
 1. 도메인
