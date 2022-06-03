@@ -12,7 +12,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 //@Import(MemoryConfig.class) //@Import를 사용하면 설정 파일간의 계층을 만들 수 있다.
 //@Import(JdbcTemplateConfigV1.class)
-@Import(JdbcTemplateConfigV2.class)
+//@Import(JdbcTemplateConfigV2.class)
+@Import(JdbcTemplateConfigV3.class)
 @SpringBootApplication(scanBasePackages = "hello.itemservice.web") // 해당 패키지만 ComponentScan해서 자동으로 빈 등록
 public class ItemServiceApplication {
 

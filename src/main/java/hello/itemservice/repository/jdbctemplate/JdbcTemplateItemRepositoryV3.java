@@ -12,8 +12,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
@@ -23,26 +22,27 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * NamedParameterJdbcTemplate
+ * SimpleJdbcInsert
+ * JdbcTemplate은 INSERT SQL를 직접 작성하지 않아도 되도록 SimpleJdbcInsert 라는 편리한  기능을 제공
  */
 @Slf4j
-public class JdbcTemplateItemRepositoryV2 implements ItemRepository {
+public class JdbcTemplateItemRepositoryV3 implements ItemRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert jdbcInsert;
 
-    public JdbcTemplateItemRepositoryV2(DataSource dataSource) {
+    public JdbcTemplateItemRepositoryV3(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("item")
+                .usingGeneratedKeyColumns("id");
+//                .usingColumns("item_name","price","quantity"); //생략가능
     }
 
     @Override
     public Item save(Item item) {
-        String sql = "insert into item(item_name, price, quantity) values(:itemName, :price, :quantity)";
-        //DB에서 autoincrement 방식을 사용하여 올려주는 PK 값을 저장하기 위해 사용
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        //Item Object가 가진 필드로 파라미터 만든다.
         SqlParameterSource param = new BeanPropertySqlParameterSource(item);
-        jdbcTemplate.update(sql, param, keyHolder);
-        item.setId(keyHolder.getKey().longValue());
+        Number key = jdbcInsert.executeAndReturnKey(param);
+        item.setId(key.longValue());
         return item;
     }
 
@@ -56,6 +56,7 @@ public class JdbcTemplateItemRepositoryV2 implements ItemRepository {
                 .addValue("quantity", updateParam.getQuantity())
                 .addValue("id", itemId);
         jdbcTemplate.update(sql, param);
+
     }
 
     @Override
